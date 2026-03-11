@@ -4,23 +4,23 @@ public class Program
 {
   public static void Main()
   {
-    Console.WriteLine("Compress or decompress?");
+    Console.WriteLine("Compress or decompress? (c, d)");
     string? type = Console.ReadLine();
     if (type is null)
     {
       return;
     }
-    while (!new[] { "compress", "decompress" }
+    while (!new[] { "compress", "decompress", "c", "d" }
     .Contains(type, StringComparer.OrdinalIgnoreCase))
     {
-      Console.WriteLine("Invalid type, try again:");
+      Console.WriteLine("Invalid input. Compress or decompress? (c, d)");
       type = Console.ReadLine();
     }
     if (type is null)
     {
       return;
     }
-    if (type.ToLower() == "compress")
+    if (type.ToLower() == "compress" || type.ToLower() == "c")
     {
       var compressor = new Compress();
       compressor.CompressText();
@@ -63,7 +63,7 @@ public class Compress
       }
     }
     string result = string.Join("", compressed);
-    Console.WriteLine(result);
+    Console.WriteLine($"Your compressed file is:\n{result}");
   }
 }
 
@@ -73,20 +73,22 @@ public class Decompress
   {
     Console.WriteLine("Enter what you want decompressed!!");
     string? compressed = Console.ReadLine();
-    if (compressed is null || compressed.All(char.IsLetter) == false)
+    if (compressed is null)
     {
       Console.WriteLine("Invalid entry!");
       return;
     }
     List<string> decompressed = [];
-    int appearances = 1;
     for (int i = 0; i < compressed.Length; i++)
     {
       if (i != 0 && i % 2 == 1)
       {
         continue;
       }
-
+      string repeated = new(compressed[i + 1], int.Parse(compressed[i].ToString()));
+      decompressed.Add(repeated);
     }
+    string result = string.Join("", decompressed);
+    Console.WriteLine($"Your decompressed file is:\n{result}");
   }
 }
