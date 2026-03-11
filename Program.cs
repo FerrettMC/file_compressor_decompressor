@@ -78,17 +78,32 @@ public class Decompress
       Console.WriteLine("Invalid entry!");
       return;
     }
-    List<string> decompressed = [];
-    for (int i = 0; i < compressed.Length; i++)
+    List<char> result = new();
+    int i = 0;
+
+    while (i < compressed.Length)
     {
-      if (i != 0 && i % 2 == 1)
+      // Read number
+      string number = "";
+      while (i < compressed.Length && char.IsDigit(compressed[i]))
       {
-        continue;
+        number += compressed[i];
+        i++;
       }
-      string repeated = new(compressed[i + 1], int.Parse(compressed[i].ToString()));
-      decompressed.Add(repeated);
+
+      if (number == "" || i >= compressed.Length || !char.IsLetter(compressed[i]))
+      {
+        Console.WriteLine("Invalid compressed format!");
+        return;
+      }
+
+      int count = int.Parse(number);
+      char letter = compressed[i];
+
+      result.AddRange(Enumerable.Repeat(letter, count));
+      i++;
     }
-    string result = string.Join("", decompressed);
-    Console.WriteLine($"Your decompressed file is:\n{result}");
+
+    Console.WriteLine($"Your decompressed file is:\n{new string(result.ToArray())}");
   }
 }
