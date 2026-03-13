@@ -1,16 +1,17 @@
 ﻿// My first C# project
-
+using System.Numerics;
+using TextCopy;
 public class Program
 {
   public static void Main()
   {
-    Console.WriteLine("Compress or decompress? (c, d)");
+    Console.WriteLine("Compress or decompress? (c, d, r for random string)");
     string? type = Console.ReadLine();
     if (type is null)
     {
       return;
     }
-    while (!new[] { "compress", "decompress", "c", "d" }
+    while (!new[] { "compress", "decompress", "c", "d", "r" }
     .Contains(type, StringComparer.OrdinalIgnoreCase))
     {
       Console.WriteLine("Invalid input. Compress or decompress? (c, d)");
@@ -20,7 +21,15 @@ public class Program
     {
       return;
     }
-    if (type.ToLower() == "compress" || type.ToLower() == "c")
+    if (type.ToLower() == "r")
+    {
+      var randomString = new RandomString();
+      string rs = randomString.getRandomString(300); // <--- Change this value for a bigger/smaller random string (a few hundred for best results)
+      Console.WriteLine(rs);
+      ClipboardService.SetText(rs); // If on [Arch] Linux, first run this: sudo pacman -S xclip xsel
+      Console.WriteLine("Copied output to clipboard!");
+    }
+    else if (type.ToLower() == "compress" || type.ToLower() == "c")
     {
       var compressor = new Compress();
       compressor.CompressText();
@@ -64,7 +73,7 @@ public class Compress
       }
     }
     string result = string.Join("", compressed);
-    Console.WriteLine($"Your compressed file is:\n{result}");
+    Console.WriteLine($"---\nYour compressed file is:\n{result}");
   }
 }
 
@@ -110,6 +119,34 @@ public class Decompress
       }
     }
 
-    Console.WriteLine($"Your decompressed file is:\n{new string(result.ToArray())}");
+    Console.WriteLine($"---\nYour decompressed file is:\n{new string(result.ToArray())}");
+  }
+}
+
+public class RandomString
+{
+  public string getRandomString(int byteCount)
+  {
+    char[] alphabet =
+    [
+        'A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    ];
+
+    byte[] bytes = new byte[byteCount];
+    Random rng = new();
+    rng.NextBytes(bytes);
+    BigInteger bigInteger = new(bytes, isUnsigned: true, isBigEndian: false);
+    List<string> result = [];
+    string bigIntString = bigInteger.ToString();
+    for (int i = 0; i < bigIntString.Length; i++)
+    {
+      int value = rng.Next(0, 26);
+      string letter = alphabet[value].ToString();
+      int count = int.Parse(bigIntString[i].ToString());
+      result.AddRange(Enumerable.Repeat(letter, count));
+    }
+    return string.Join("", result);
+
   }
 }
