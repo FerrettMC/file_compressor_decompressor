@@ -115,13 +115,15 @@ public class Decompress
         i++;
       }
 
-      if (number == "" || i >= compressed.Length || !char.IsLetter(compressed[i]))
+      if (i >= compressed.Length || !char.IsLetter(compressed[i]))
       {
-        Console.WriteLine("Invalid compressed format!");
-        return;
+          Console.WriteLine("Invalid compressed format!");
+          return;
       }
 
-      int count = int.Parse(number);
+      int count = number == "" ? 1 : int.Parse(number);
+
+
       char letter = compressed[i];
 
       result.AddRange(Enumerable.Repeat(letter, count));
