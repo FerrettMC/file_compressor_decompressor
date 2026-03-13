@@ -46,7 +46,7 @@ public class Compress
       return;
     }
     List<string> compressed = [];
-    int appearances = 1;
+    int? appearances = 1;
     for (int i = 0; i < decompressed.Length; i++)
     {
       char letter = decompressed[i];
@@ -58,6 +58,7 @@ public class Compress
       }
       else
       {
+        appearances = appearances == 1 ? null : appearances;
         compressed.Add($"{appearances}{letter}");
         appearances = 1;
       }
@@ -78,7 +79,7 @@ public class Decompress
       Console.WriteLine("Invalid entry!");
       return;
     }
-    List<char> result = new();
+    List<char> result = [];
     int i = 0;
 
     while (i < compressed.Length)
@@ -102,6 +103,11 @@ public class Decompress
 
       result.AddRange(Enumerable.Repeat(letter, count));
       i++;
+      while (i < compressed.Length && char.IsLetter(compressed[i]))
+      {
+        result.Add(compressed[i]);
+        i++;
+      }
     }
 
     Console.WriteLine($"Your decompressed file is:\n{new string(result.ToArray())}");
