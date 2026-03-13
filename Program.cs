@@ -1,5 +1,4 @@
 ﻿// My first C# project
-using TextCopy;
 public class Program
 {
   public static void Main()
