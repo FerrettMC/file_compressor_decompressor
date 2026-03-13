@@ -81,7 +81,13 @@ public class Compress
       }
     }
     string result = string.Join("", compressed);
+    double percent = (double)result.Length / decompressed.Length * 100;
+    int roundedPercent = (int)Math.Round(percent);
+    int percentDecrease = 100 - roundedPercent;
+
+
     Console.WriteLine($"---\nYour compressed file is:\n{result}");
+    Console.WriteLine($"Original file size: {decompressed.Length} characters. New file size: {result.Length} characters. {percentDecrease}% decrease.");
   }
 }
 
