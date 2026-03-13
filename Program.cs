@@ -25,7 +25,15 @@ public class Program
     {
       var randomString = new RandomString();
       string rs = randomString.getRandomString(300); // <--- Change this value for a bigger/smaller random string (a few hundred for best results)
-      Console.WriteLine(rs);
+      try
+      {
+        ClipboardService.SetText(rs);
+      }
+      catch
+      {
+        Console.WriteLine("Clipboard unavailable on this system.");
+      }
+
       ClipboardService.SetText(rs); // If on [Arch] Linux, first run this: sudo pacman -S xclip xsel
       Console.WriteLine("Copied output to clipboard!");
     }
