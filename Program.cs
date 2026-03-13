@@ -24,7 +24,7 @@ public class Program
     if (type.ToLower() == "r")
     {
       var randomString = new RandomString();
-      string rs = randomString.getRandomString(300); // <--- Change this value for a bigger/smaller random string (a few hundred for best results)
+      string rs = randomString.GetRandomString(300); // <--- Change this value for a bigger/smaller random string (a few hundred for best results)
       try
       {
         ClipboardService.SetText(rs);
@@ -139,7 +139,7 @@ public class Decompress
 
 public class RandomString
 {
-  public string getRandomString(int byteCount)
+  public string GetRandomString(int byteCount)
   {
     char[] alphabet =
     [
