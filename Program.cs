@@ -27,15 +27,14 @@ public class Program
       string rs = randomString.GetRandomString(300); // <--- Change this value for a bigger/smaller random string (a few hundred for best results)
       try
       {
-        ClipboardService.SetText(rs);
+        ClipboardService.SetText(rs); // If on [Arch] Linux, first run this: sudo pacman -S xclip xsel
+        Console.WriteLine("Copied output to clipboard!");
       }
       catch
       {
         Console.WriteLine("Clipboard unavailable on this system.");
       }
 
-      ClipboardService.SetText(rs); // If on [Arch] Linux, first run this: sudo pacman -S xclip xsel
-      Console.WriteLine("Copied output to clipboard!");
     }
     else if (type.ToLower() == "compress" || type.ToLower() == "c")
     {
@@ -88,6 +87,15 @@ public class Compress
 
     Console.WriteLine($"---\nYour compressed file is:\n{result}");
     Console.WriteLine($"Original file size: {decompressed.Length} characters. New file size: {result.Length} characters. {percentDecrease}% decrease.");
+    try
+      {
+        ClipboardService.SetText(result); // If on [Arch] Linux, first run this: sudo pacman -S xclip xsel
+        Console.WriteLine("Copied output to clipboard!");
+      }
+      catch
+      {
+        Console.WriteLine("Clipboard unavailable on this system.");
+      }
   }
 }
 
@@ -134,8 +142,21 @@ public class Decompress
         i++;
       }
     }
-
-    Console.WriteLine($"---\nYour decompressed file is:\n{new string(result.ToArray())}");
+    string theResult = string.Join("", result);
+    double percent = (double)(theResult.Length - compressed.Length) / compressed.Length * 100;
+    int roundedPercent = (int)Math.Round(percent);
+    Console.WriteLine($"---\nYour decompressed file is:\n{theResult}");
+    
+    Console.WriteLine($"Original file size: {compressed.Length} characters. New file size: {theResult.Length} characters. {roundedPercent}% increase.");
+    try
+      {
+        ClipboardService.SetText(theResult); // If on [Arch] Linux, first run this: sudo pacman -S xclip xsel
+        Console.WriteLine("Copied output to clipboard!");
+      }
+      catch
+      {
+        Console.WriteLine("Clipboard unavailable on this system.");
+      }
   }
 }
 
